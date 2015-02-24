@@ -92,5 +92,6 @@ app.use( middleware.unhandledError );   // Needs to be the last middleware on th
 app.set( 'port', config.get("port") );
 
 var server = app.listen( app.get('port'), function(){
-	debug( '{%= name %} server is listening on port ' + server.address().port );
+	var message = '{%= name %} server is listening on port ' + server.address().port
+	console.log( message.green );
 });

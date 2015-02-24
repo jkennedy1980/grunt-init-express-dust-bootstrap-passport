@@ -76,7 +76,8 @@ exports.template = function( grunt, init, done ){
 			"mongoose": "~3.8.21",
 			"connect-mongo": "~0.6.0",
 			"passport": "~0.2.1",
-			"passport-local": "~1.0.0"
+			"passport-local": "~1.0.0",
+			"bcrypt": "~0.8.1"
 		};
 
 		props.devDependencies = {
