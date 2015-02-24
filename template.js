@@ -74,7 +74,9 @@ exports.template = function( grunt, init, done ){
             "lusca": "~1.0.2",
             "pony-config": "~0.1.5",
 			"mongoose": "~3.8.21",
-			"connect-mongo": "~0.6.0"
+			"connect-mongo": "~0.6.0",
+			"passport": "~0.2.1",
+			"passport-local": "~1.0.0"
 		};
 
 		props.devDependencies = {

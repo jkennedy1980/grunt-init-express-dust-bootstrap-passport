@@ -6,7 +6,6 @@
  * Licensed under the {%= licenses.join(', ') %} license{%= licenses.length === 1 ? '' : 's' %}.
  */
 
-
 var express = require('express');
 var debug = require('debug');
 var path = require('path');
@@ -27,20 +26,21 @@ require('dustjs-helpers');
 var consolidate = require('consolidate');
 require('../lib/dust-helpers.js')( dust );
 var dbBootstrap = require('../lib/db-bootstrap');
+var authentication = require('../lib/authentication');
 
 
 // LOAD CONFIGURATION
 config
-    .setOptions( { debug: true } )
-    .findEnvironment({ env: 'ENVIRONMENT', default:'dev' })
-    .useObject( require('../config/common') )
-    .when(['dev']).useObject( require('../config/development') )
-    .when(['prod', 'production', 'stage']).useObject( require('../config/production') );
+	.setOptions( { debug: true } )
+	.findEnvironment({ env: 'ENVIRONMENT', default:'dev' })
+	.useObject( require('../config/common') )
+	.when(['dev']).useObject( require('../config/development') )
+	.when(['prod', 'production', 'stage']).useObject( require('../config/production') );
 
 console.log( "Loaded Configuration: ", config.getEnvironment() );
 
 // Must be after configuration is loaded
-var db = dbBootstrap.connect();
+dbBootstrap.connect();
 
 app.set('views', path.join(__dirname, '../views'));
 app.set('showStackError', true);
@@ -54,24 +54,27 @@ app.use( favicon( path.join(__dirname, '../public/images/favicon.ico')) );
 app.use( logger('dev') );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded({ extended: false }) );
+
 app.use( cookieParser() );
 app.use( session( { secret: "topsecret", saveUninitialized: true, resave: true } ) );
 app.use( dbBootstrap.mongoExpressSession() );
 
+authentication.init( app );
+
 app.use( lusca({
-    csrf: true,
-    csp: {
-        policy: {
-            'default-src': '\'self\' *.googleapis.com',
-            'img-src': '\'self\'',
-            'script-src': '\'self\' \'unsafe-inline\' *.googleapis.com',
-            'style-src': '\'self\' \'unsafe-inline\''
-        }
-    },
-    xframe: 'SAMEORIGIN',
-    p3p: false,
-    hsts: { maxAge: 31536000, includeSubDomains: true },
-    xssProtection: true
+	csrf: true,
+	csp: {
+		policy: {
+			'default-src': '\'self\' *.googleapis.com',
+			'img-src': '\'self\'',
+			'script-src': '\'self\' \'unsafe-inline\' *.googleapis.com',
+			'style-src': '\'self\' \'unsafe-inline\''
+		}
+	},
+	xframe: 'SAMEORIGIN',
+	p3p: false,
+	hsts: { maxAge: 31536000, includeSubDomains: true },
+	xssProtection: true
 }));
 
 app.use( flash() );
@@ -89,5 +92,5 @@ app.use( middleware.unhandledError );   // Needs to be the last middleware on th
 app.set( 'port', config.get("port") );
 
 var server = app.listen( app.get('port'), function(){
-    debug( 'Express server listening on port ' + server.address().port );
+	debug( '{%= name %} server is listening on port ' + server.address().port );
 });

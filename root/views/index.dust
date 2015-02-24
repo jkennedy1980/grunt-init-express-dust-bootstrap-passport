@@ -1,4 +1,6 @@
-{>header data-controller="home" data-action="init" /}
+{>main-layout activeNavLink="login" /}
+
+{<body}
 
 <div class="row">
     <div class="col-xs-12">
@@ -20,4 +22,4 @@
     </div>
 </div>
 
-{>footer /}
+{/body}

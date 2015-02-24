@@ -1,50 +1,69 @@
 ( function(){
-    'use strict';
+	'use strict';
 
-    var config = require('pony-config');
-    
-    exports.localize = function( req, res, next ){
+	var config = require('pony-config');
 
-        if( req.flash !== undefined ){
-            var flashErrors = req.flash('error');
-            var flashInfos = req.flash('info');
-            var flashSuccesses = req.flash('success');
+	exports.localize = function( req, res, next ){
 
-            res.locals.flashMessagesPresent = function(){
-                return (flashErrors && flashErrors.length > 0) || (flashInfos && flashInfos.length > 0) || (flashSuccesses && flashSuccesses.length > 0);
-            };
+		req.flashError = function( message, error ){
+			if( error ){
+				if( error instanceof Error && error.message ){
+					message += " " + error.message;
+				}else{
+					message += " " + error.toString();
+				}
+			}
+			req.flash( 'error', message );
+		};
 
-            // Just moving the flash messages to the response locals so we can reference them in the views
-            res.locals.flashErrors = flashErrors;
-            res.locals.flashInfos = flashInfos;
-            res.locals.flashSuccesses = flashSuccesses;
-        }
+		req.flashSuccess = function( message ){
+			req.flash( 'success', message );
+		};
 
-        if( req.user ) res.locals.user = req.user;
-        res.locals.currentUrl = req.originalUrl;
-        res.locals.scriptsToMinify = config.get("scriptsToMinify");
-        res.locals.useMinifiedJs = config.get("useMinifiedJs");
+		req.flashInfo = function( message ){
+			req.flash( 'info', message );
+		};
 
-        next();
-    };
-    
-    exports.fourOhFour = function( req, res, next ){
-        var err = new Error('Not Found');
-        err.status = 404;
-        next(err);
-    };
+		if( req.flash !== undefined ){
+			var flashErrors = req.flash('error');
+			var flashInfos = req.flash('info');
+			var flashSuccesses = req.flash('success');
 
-    exports.unhandledError = function( err, req, res, next ){
-        console.log( "Unhandled error: ", err );
+			res.locals.flashMessagesPresent = function(){
+				return (flashErrors && flashErrors.length > 0) || (flashInfos && flashInfos.length > 0) || (flashSuccesses && flashSuccesses.length > 0);
+			};
 
-        var error = ( config.get("renderStackTraces") === true ) ? err : {};
+			// Just moving the flash messages to the response locals so we can reference them in the views
+			res.locals.flashErrors = flashErrors;
+			res.locals.flashInfos = flashInfos;
+			res.locals.flashSuccesses = flashSuccesses;
+		}
 
-        res.status( err.status || 500 );
+		if( req.user ) res.locals.user = req.user;
+		res.locals.currentUrl = req.originalUrl;
+		res.locals.scriptsToMinify = config.get("scriptsToMinify");
+		res.locals.useMinifiedJs = config.get("useMinifiedJs");
 
-        res.render( 'error', {
-            message: err.message,
-            error: error
-        });
-    };
-    
+		next();
+	};
+
+	exports.fourOhFour = function( req, res, next ){
+		var err = new Error('Not Found');
+		err.status = 404;
+		next(err);
+	};
+
+	exports.unhandledError = function( err, req, res, next ){
+		console.log( "Unhandled error: ", err, err.stack );
+
+		var error = ( config.get("renderStackTraces") === true ) ? err : {};
+
+		res.status( err.status || 500 );
+
+		res.render( 'error', {
+			message: err.message,
+			error: error
+		});
+	};
+
 })();
