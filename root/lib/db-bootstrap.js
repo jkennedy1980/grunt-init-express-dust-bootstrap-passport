@@ -12,7 +12,7 @@
 		MongoStore = require('connect-mongo')( session );
 
 		var connectionString = config.get("mongo.connectionString");
-		
+
 		exports.db = mongoose.connect( connectionString, function( error ){
 			if( error ){
 				console.error( 'Could not connect to MongoDB! ' + config.db, error );
@@ -21,17 +21,21 @@
 		});
 
 		requireMany( '../models' );
-		
+
 		return exports.db;
 	};
-	
+
 	exports.mongoExpressSession = function(){
 		if( !exports.db ) throw new Error( "You must call connect() first to setup the mongo connection." );
-		
+
 		return session({
 			saveUninitialized: true,
 			resave: true,
 			secret: config.get("sessionSecret"),
+			cookie: {
+				maxAge: 30*24*60*60*1000,
+				httpOnly: true
+			},
 			store: new MongoStore({
 				mongooseConnection: mongoose.connection
 			})

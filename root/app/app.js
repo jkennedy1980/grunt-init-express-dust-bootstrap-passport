@@ -55,10 +55,8 @@ app.use( logger('dev') );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded({ extended: false }) );
 
-app.use( cookieParser() );
-app.use( session( { secret: "topsecret", saveUninitialized: true, resave: true } ) );
+aapp.use( cookieParser() );
 app.use( dbBootstrap.mongoExpressSession() );
-
 authentication.init( app );
 
 app.use( lusca({
