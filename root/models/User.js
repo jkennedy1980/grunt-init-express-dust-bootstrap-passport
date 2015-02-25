@@ -9,16 +9,25 @@
 		email: { type: String, lowercase: true, trim: true, required: true, unique: true },
 		passwordHash: { type: String, required: true }
 	});
-	
+
 	UserSchema.methods.hashPasswordAndSave = function( password, callback ){
 		var self = this;
 		authentication.hashPassword( password, function( error, hashedPassword ){
 			if( error ) return callback( error, false );
 			self.passwordHash = hashedPassword;
-			self.save( callback );
+			self.save( function( error, newUser ){
+				if( error ){
+					if( error.code === 11000 ){
+						// user exists
+						return callback( new Error( "An account is already registered with this email address." ), false );
+					}
+					return callback( error, false );
+				}
+				callback( false, newUser );
+			});
 		});
 	};
-	
+
 	UserSchema.statics.register = function( userData, callback ){
 		var User = this;
 		var user = new User();
@@ -39,6 +48,6 @@
 			return ret;
 		}
 	});
-	
+
 	mongoose.model( 'User', UserSchema );
 })();
