@@ -28,18 +28,20 @@
 	exports.mongoExpressSession = function(){
 		if( !exports.db ) throw new Error( "You must call connect() first to setup the mongo connection." );
 
-		return session({
-			saveUninitialized: true,
-			resave: true,
-			secret: config.get("sessionSecret"),
+		var sessionSettings = {
+			saveUninitialized: false,
+			resave: false,
+			secret: config.get("session.secret"),
 			cookie: {
-				maxAge: 30*24*60*60*1000,
+				maxAge: config.get("session.cookieExpirationMs"),
 				httpOnly: true
 			},
 			store: new MongoStore({
 				mongooseConnection: mongoose.connection
 			})
-		});
+		};
+
+		return session( sessionSettings );
 	};
 
 })();
