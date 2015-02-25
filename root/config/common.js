@@ -8,7 +8,7 @@
 		},
 		session:{
 			secret: "DuckBillDonkey",
-			cookieExpirationMs: 30*24*60*60*1000
+			cookieExpirationMs: 30 * 24 * 60 * 60 * 1000
 		},
 		scriptsToMinify: [
 			"public/js/libraries/bootstrap/transition.js",
