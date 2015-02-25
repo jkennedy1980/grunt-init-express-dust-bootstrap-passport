@@ -55,7 +55,7 @@ app.use( logger('dev') );
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded({ extended: false }) );
 
-aapp.use( cookieParser() );
+app.use( cookieParser() );
 app.use( dbBootstrap.mongoExpressSession() );
 authentication.init( app );
 
