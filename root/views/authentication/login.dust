@@ -13,6 +13,7 @@
         {>flash/}
         <form method="POST">
             <input type="hidden" name="_csrf" value="{_csrf}" />
+            <input type="hidden" name="continueTo" value="{continueTo}" />
             <div class="form-group">
                 <label for="email">Email address</label>
                 <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">

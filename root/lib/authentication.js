@@ -1,10 +1,11 @@
 ( function(){
 	"use strict";
-	
+
 	var passport = require('passport');
 	var LocalStrategy = require('passport-local').Strategy;
 	var mongoose = require('mongoose');
 	var bcrypt = require('bcrypt');
+	var querystring = require("querystring");
 
 	var PASSWORD_HASH_ITERATIONS = 10; // Needs to increase as hardware becomes faster
 
@@ -19,7 +20,10 @@
 
 			req.login( user, function( error ){
 				if( error ) return next( error );
-				res.redirect( '/' );
+
+				var continueTo = req.body.continueTo || '/';
+
+				res.redirect( continueTo );
 			});
 
 		})( req, res, next );
@@ -76,6 +80,14 @@
 			if( error ) return callback( error );
 			callback( false, isMatch );
 		});
+	};
+
+	exports.protect = function( req, res, next ){
+		if( !req.isAuthenticated || !req.isAuthenticated() || !req.user ){
+			req.flashError( "Please login to continue." );
+			return res.redirect( '/login?' + querystring.stringify({ continueTo: req.originalUrl }) );
+		}
+		next();
 	};
 
 })();

@@ -16,7 +16,7 @@
 	};
 
 	function getLogin( req, res ){
-		res.render('authentication/login');
+		res.render('authentication/login', {continueTo: req.query.continueTo });
 	}
 
 	function postLogin( req, res ){
