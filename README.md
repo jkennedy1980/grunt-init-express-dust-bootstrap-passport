@@ -1,6 +1,6 @@
 # grunt-init-express-dust-bootstrap
 
-> Creates a Nnode.js server app with [grunt-init][], including Express, Dust, Bootstrap, Mocha, & ESlint.
+> Creates a Nnode.js server app with [grunt-init][], including Express, Dust, Bootstrap, Mongoose, Passport, Mocha, & ESlint.
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
 
