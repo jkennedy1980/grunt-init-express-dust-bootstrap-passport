@@ -77,7 +77,11 @@ exports.template = function( grunt, init, done ){
 			"connect-mongo": "~0.6.0",
 			"passport": "~0.2.1",
 			"passport-local": "~1.0.0",
-			"bcrypt": "~0.8.1"
+			"bcrypt": "~0.8.1",
+			"nodemailer": "~1.3.1",
+			"nodemailer-smtp-pool": "~1.0.0",
+			"email-templates": "~1.2.0",
+			"less": "~2.4.0"
 		};
 
 		props.devDependencies = {

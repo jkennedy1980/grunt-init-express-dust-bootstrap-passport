@@ -86,6 +86,7 @@ loadedRoutes.apply( app );
 app.use( middleware.fourOhFour );       // Needs to be after all routes are loaded
 app.use( middleware.unhandledError );   // Needs to be the last middleware on the stack
 
+require('../lib/email-bootstrap');
 
 app.set( 'port', config.get("port") );
 

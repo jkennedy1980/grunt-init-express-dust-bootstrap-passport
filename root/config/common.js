@@ -1,5 +1,7 @@
 ( function(){
 	'use strict';
+	
+	var path = require('path');
 
 	module.exports = {
 		port: process.env.PORT || 3000,
@@ -26,7 +28,11 @@
 			"public/js/utils.js",
 			"public/js/common.js",
 			"public/js/home.js"
-		]
+		],
+		email:{
+			enabled: false,
+			templatesPath: path.join( __dirname, '/../views/emails' )
+		}
 	};
 
 })();
