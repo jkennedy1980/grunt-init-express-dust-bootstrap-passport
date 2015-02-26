@@ -1,4 +1,4 @@
-# grunt-init-express-dust-bootstrap
+# grunt-init-express-dust-bootstrap-passport
 
 > Creates a Nnode.js server app with [grunt-init][], including Express, Dust, Bootstrap, Mongoose, Passport, Mocha, & ESlint.
 
