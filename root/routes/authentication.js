@@ -51,8 +51,14 @@
 		User.register( userData, function( error, registeredUser ){
 			if( error ) req.flashError( 'Error registering user:', error );
 			if( !registeredUser ) return res.redirect( '/register' );
-			req.flashSuccess( 'Registration complete. Please login.' );
-			res.redirect( '/login' );
+
+			emailer.sendEmail( "register", { activationUrl: "blah" }, registeredUser.email, "Please activate your account", function( error, result ){
+				if( error ) req.flashError( "Error sending activation email. Please try again later. ", error );
+				console.log( "Sent registration email: ", result );
+				req.flashSuccess( 'Registration complete. Please login.' );
+				res.redirect( '/login' );
+			});
+
 		});
 	}
 

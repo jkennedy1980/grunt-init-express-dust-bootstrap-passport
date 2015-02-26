@@ -1,17 +1,5 @@
 
-@linkColor: #BE091B;
-
-.radialGradient(@inner-color: #555; @inner-stop: 50%; @outer-color: #333;  @outer-stop: 90%) {
-  background-color: rgb( red(@inner-color), green(@inner-color), blue(@inner-color) );
-  background-color: rgba( red(@inner-color), green(@inner-color), blue(@inner-color), alpha(@inner-color) );
-  background: -moz-radial-gradient(center, ellipse cover, @inner-color @inner-stop, @outer-color @outer-stop);
-  background: -webkit-gradient(radial, center center, 0px, center center, @outer-stop, color-stop(@inner-stop, @inner-color), color-stop(@outer-stop, @outer-color));
-  background: -webkit-radial-gradient(center, ellipse cover, @inner-color @inner-stop, @outer-color @outer-stop);
-  background: -o-radial-gradient(center, ellipse cover, @inner-color @inner-stop, @outer-color @outer-stop);
-  background: -ms-radial-gradient(center, ellipse cover, @inner-color @inner-stop, @outer-color @outer-stop);
-  background: radial-gradient(ellipse at center, @inner-color @inner-stop, @outer-color @outer-stop);
-  filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",argb(@outer-color), argb(@outer-color))); // IE9 and down, gets no color-stop at all for proper fallback
-}
+@linkColor: #0066FF;
 
 * {
   margin: 0;
@@ -128,13 +116,13 @@ p, ul, ol {
 
 .container .content.footer p {
   margin-bottom: 0;
-  color: #888;
+  color: #fff;
   text-align: center;
   font-size: 14px;
 }
 
 .container .content.footer a {
-  color: #888;
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
 }

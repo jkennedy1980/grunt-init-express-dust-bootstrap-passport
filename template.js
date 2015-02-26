@@ -81,7 +81,7 @@ exports.template = function( grunt, init, done ){
 			"nodemailer": "~1.3.1",
 			"nodemailer-smtp-pool": "~1.0.0",
 			"email-templates": "~1.2.0",
-			"less": "~2.4.0"
+			"less": "~1.7.5"
 		};
 
 		props.devDependencies = {
