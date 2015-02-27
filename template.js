@@ -1,5 +1,5 @@
 /*
- * grunt-init-express-socketio
+ * grunt-init-express-dust-bootstrap-passport
  *
  * Copyright (c) 2014 Joshua Kennedy
  * Licensed under the MIT license.
@@ -7,7 +7,7 @@
 
 'use strict';
 
-exports.description = 'Scaffold Node.JS, Express, Mocha, Eslint.';
+exports.description = 'Scaffold Node.JS, Express, Mocha, Eslint, Dust, Bootstrap, Passport';
 
 // Template-specific notes to be displayed before question prompts.
 exports.notes = '_Project name_ shouldn\'t contain "node" or "js" and should ' +

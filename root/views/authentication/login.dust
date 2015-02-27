@@ -1,5 +1,5 @@
-{>main-layout activeNavLink="register" /}
-
+{>main-layout activeNavLink="register" data-controller="authenticate" data-action="login" /}
+        
 {<body}
 
 <div class="row">
