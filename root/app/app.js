@@ -36,8 +36,8 @@ config
 	.useObject( require('../config/common') )
 	.when(['dev']).useObject( require('../config/development') )
 	.when(['prod', 'production', 'stage']).useObject( require('../config/production') );
-
 console.log( "Loaded Configuration: ", config.getEnvironment() );
+config.list();
 
 // Must be after configuration is loaded
 dbBootstrap.connect();

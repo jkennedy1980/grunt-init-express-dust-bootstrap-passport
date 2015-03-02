@@ -72,7 +72,7 @@ exports.template = function( grunt, init, done ){
 			"consolidate": "~0.10.0",
             "moment": "~2.9.0",
             "lusca": "~1.0.2",
-            "pony-config": "~0.1.5",
+            "pony-config": "~1.0.0",
 			"mongoose": "~3.8.21",
 			"connect-mongo": "~0.6.0",
 			"passport": "~0.2.1",

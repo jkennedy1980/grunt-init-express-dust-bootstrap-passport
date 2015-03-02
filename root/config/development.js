@@ -6,11 +6,11 @@
 		renderStackTraces: true,
 		email:{
 			enabled: true,
-			"service": "gmail",
-			"debug": true,
-			"auth":{
-				"user": "jkennedy022@gmail.com",
-				"pass": process.env.GMAIL_SMTP_TOKEN
+            debug: true,
+            service: "gmail",
+			auth:{
+				user: process.env.GMAIL_SMTP_EMAIL,
+				pass: process.env.GMAIL_SMTP_APP_PASSWORD
 			}
 		}
 	};

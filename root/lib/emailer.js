@@ -7,8 +7,6 @@
 	var loadEmailTemplates = require('email-templates');
 
 	var smtpTransport = nodemailer.createTransport( smtpPool( config.get("email") ) );
-	console.log( "Setup email config: ", config.get("email") );
-
 
 	smtpTransport.on( 'log', function( data ){
 		if( data && data.type === "error" ){
@@ -74,7 +72,7 @@
 	function _sendMail( subject, to, renderedTemplate, callback ){
 
 		var mailOptions = {
-			from: config.get("fromEmail"),
+			from: config.get("email.fromEmail"),
 			to: to,
 			subject: subject,
 			text: renderedTemplate.text,
