@@ -15,9 +15,10 @@
 
 		exports.db = mongoose.connect( connectionString, function( error ){
 			if( error ){
-				console.error( 'Could not connect to MongoDB! ' + config.db, error );
+				console.error( ('Could not connect to MongoDB! ' + connectionString).red, error );
+			} else {
+				console.log( "Connected to Mongo".green );
 			}
-			console.log( "Connected to Mongo".green );
 		});
 
 		requireMany( '../models' );
