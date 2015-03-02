@@ -4,6 +4,7 @@
 	var mongoose = require('mongoose');
 	var User = mongoose.model('User');
 	var authentication = require('../lib/authentication');
+	var emailer = require('../lib/emailer');
 
 	module.exports = function( app ){
 		app.get( "/register", getRegister );
