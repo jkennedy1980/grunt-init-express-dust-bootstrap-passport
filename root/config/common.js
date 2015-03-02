@@ -25,9 +25,11 @@
 			"public/js/libraries/bootstrap/scrollspy.js",
 			"public/js/libraries/bootstrap/tab.js",
 			"public/js/libraries/bootstrap/affix.js",
+			"public/js/shared/password-strength.js",
 			"public/js/utils.js",
 			"public/js/common.js",
-			"public/js/home.js"
+			"public/js/home.js",
+			"public/js/authenticate.js"
 		],
 		email:{
 			enabled: false,
