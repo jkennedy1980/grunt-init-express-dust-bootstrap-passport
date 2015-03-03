@@ -14,6 +14,8 @@
 		app.post( '/login', postLogin );
 
 		app.get( '/logout', getLogout );
+		
+		app.get( '/emailverification/:token', getEmailVerification );
 	};
 
 	function getLogin( req, res ){
@@ -35,12 +37,12 @@
 
 	function postRegister( req, res ){
 
-		//TODO: sanitize
+		//TODO: sanitize sterlize and homongenize
 		var email = req.body.email;
 		var password = req.body.password;
 
 		if( !email || !password ){
-			req.flash( 'error', 'Email and password are required.' );
+			req.flashError( 'Email and password are required.' );
 			return res.redirect( '/register' );
 		}
 
@@ -50,17 +52,41 @@
 		};
 
 		User.register( userData, function( error, registeredUser ){
-			if( error ) req.flashError( 'Error registering user:', error );
+			if( error ) return req.flashError( 'Error registering user:', error );
+			
 			if( !registeredUser ) return res.redirect( '/register' );
 
-			emailer.sendEmail( "register", { activationUrl: "blah" }, registeredUser.email, "Please activate your account", function( error, result ){
-				if( error ) req.flashError( "Error sending activation email. Please try again later. ", error );
-				console.log( "Sent registration email: ", result );
-				req.flashSuccess( 'Registration complete. Please login.' );
+			var activationURL = req.headers.origin + "/emailverification/" + registeredUser.emailVerificationToken;
+			emailer.sendEmail( "register", { activationUrl: activationURL }, registeredUser.email, "Please activate your account", function( error, result ){
+				if( error ){
+					req.flashError( "Error sending activation email. Please try again later. ", error );
+				} else {
+					console.log( "Sent registration email: ", result );
+					req.flashSuccess( 'Check your email. We have sent a verification email to your account' );
+				}
 				res.redirect( '/login' );
 			});
 
 		});
 	}
 
+	function getEmailVerification( req, res ){
+		var token = req.params.token;
+
+		if( !token ){
+			req.flashError( 'Verification link id invalid' );
+			req.redirect( '/login' );
+		}
+
+		User.validateEmail( token, function( error, validatedUser ){
+			if( error ){
+				req.flashError( "Validation Failed. ", error );
+			} else {
+				console.log( "Email validation complete for email: ", validatedUser.email );
+				req.flashSuccess( "Your account registration is now complete. Please login." );
+			}
+
+			res.redirect( '/login' );
+		});
+	}	
 })();

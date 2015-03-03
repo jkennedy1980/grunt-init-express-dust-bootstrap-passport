@@ -4,21 +4,32 @@
 	var mongoose = require('mongoose');
 	var Schema = mongoose.Schema;
 	var authentication = require('../lib/authentication');
+	var moment = require('moment');
 
 	var UserSchema = new Schema({
 		email: { type: String, lowercase: true, trim: true, required: true, unique: true },
-		passwordHash: { type: String, required: true }
+		passwordHash: { type: String, required: true },
+		isEmailVerified: { type: Boolean, required: true, default: false },
+		emailVerificationToken: { type: String },
+		emailVerificationExpiry: { type: Date }
 	});
 
-	UserSchema.methods.hashPasswordAndSave = function( password, callback ){
+
+	UserSchema.statics.register = function( userData, callback ){
 		var self = this;
-		authentication.hashPassword( password, function( error, hashedPassword ){
+		var User = this;
+		var user = new User();
+		user.email = userData.email;
+		user.emailVerificationToken = _generateEmailVerificationToken();
+		user.emailVerificationExpiry = moment().add( 10, 'm' ).toDate();
+
+		authentication.hashPassword( userData.password, function( error, hashedPassword ){
 			if( error ) return callback( error, false );
-			self.passwordHash = hashedPassword;
-			self.save( function( error, newUser ){
+			user.passwordHash = hashedPassword;
+			user.save( function( error, newUser ){
 				if( error ){
 					if( error.code === 11000 ){
-						// user exists
+						// user already exists
 						return callback( new Error( "An account is already registered with this email address." ), false );
 					}
 					return callback( error, false );
@@ -28,13 +39,23 @@
 		});
 	};
 
-	UserSchema.statics.register = function( userData, callback ){
+	UserSchema.statics.validateEmail = function( token, callback ){
+		var self = this;
 		var User = this;
-		var user = new User();
-		user.email = userData.email;
-		user.hashPasswordAndSave( userData.password, callback );
-	};
+		User.findOne( { emailVerificationToken : token } ).exec( function( error, user ){
+			if( error ) return callback( new Error( "Database read error" ), false );
+			if( !user ) return callback( new Error( "Verification email invalid." ), false );
+			if( moment().isAfter( moment( user.emailVerificationExpiry )) ){
+				return callback( new Error( "Verification email has expired" ), false );
+			}
+			user.emailVerificationToken = false;
+			user.emailVerificationExpiry = false;
+			user.isEmailVerified = true;
 
+			callback( false, user );
+		});
+	};	
+	
 	UserSchema.set( 'toJSON', {
 		transform: function( doc, ret, options ){
 			delete ret.passwordHash;
@@ -49,5 +70,15 @@
 		}
 	});
 
+	function _generateEmailVerificationToken(){
+		var TOKEN_LENGTH = 40;
+		var TOKEN_CHAR_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		var token = "";
+		for( var i=0; i < TOKEN_LENGTH; i++ ){
+			token += TOKEN_CHAR_SET.charAt( Math.random() * TOKEN_CHAR_SET.length );
+		}
+		return token;
+	}
+	
 	mongoose.model( 'User', UserSchema );
 })();
