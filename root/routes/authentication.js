@@ -2,91 +2,101 @@
 	'use strict';
 
 	var mongoose = require('mongoose');
-	var User = mongoose.model('User');
+	var Schema = mongoose.Schema;
 	var authentication = require('../lib/authentication');
-	var emailer = require('../lib/emailer');
+	var moment = require('moment');
 
-	module.exports = function( app ){
-		app.get( "/register", getRegister );
-		app.post( "/register", postRegister );
+	var UserSchema = new Schema({
+		email: { type: String, lowercase: true, trim: true, required: true, unique: true },
+		passwordHash: { type: String, required: true },
+		isEmailVerified: { type: Boolean, required: true, default: false },
+		emailVerificationToken: { type: String },
+		emailVerificationExpiry: { type: Date }
+	});
 
-		app.get( '/login', getLogin );
-		app.post( '/login', postLogin );
 
-		app.get( '/logout', getLogout );
-		
-		app.get( '/emailverification/:token', getEmailVerification );
+	UserSchema.statics.register = function( userData, callback ){
+		var User = this;
+		var user = new User();
+		user.email = userData.email;
+		user.emailVerificationToken = _generateEmailVerificationToken();
+		user.emailVerificationExpiry = moment().add( 10, 'm' ).toDate();
+
+		authentication.hashPassword( userData.password, function( error, hashedPassword ){
+			if( error ) return callback( error, false );
+			user.passwordHash = hashedPassword;
+			user.save( function( error, newUser ){
+				if( error ){
+					if( error.code === 11000 ){
+						// user already exists
+						return callback( new Error( "An account is already registered with this email address." ), false );
+					}
+					return callback( error, false );
+				}
+				callback( false, newUser );
+			});
+		});
 	};
 
-	function getLogin( req, res ){
-		res.render('authentication/login', {continueTo: req.query.continueTo });
-	}
+	UserSchema.statics.validateEmail = function( token, callback ){
+		var User = this;
+		User.findOne( { emailVerificationToken : token } ).exec( function( error, user ){
+			if( error ) return callback( new Error( "Database read error" ), false );
+			if( !user ) return callback( new Error( "Verification token is invalid" ), false );
 
-	function postLogin( req, res ){
-		authentication.handleLogin( req, res );
-	}
-
-	function getLogout( req, res ){
-		req.logout();
-		res.redirect('/');
-	}
-
-	function getRegister( req, res ){
-		res.render('authentication/register');
-	}
-
-	function postRegister( req, res ){
-
-		//TODO: sanitize sterlize and homongenize
-		var email = req.body.email;
-		var password = req.body.password;
-
-		if( !email || !password ){
-			req.flashError( 'Email and password are required.' );
-			return res.redirect( '/register' );
-		}
-
-		var userData = {
-			email: email,
-			password: password
-		};
-
-		User.register( userData, function( error, registeredUser ){
-			if( error ) return req.flashError( 'Error registering user:', error );
-			
-			if( !registeredUser ) return res.redirect( '/register' );
-
-			var activationURL = req.headers.origin + "/emailverification/" + registeredUser.emailVerificationToken;
-			emailer.sendEmail( "register", { activationUrl: activationURL }, registeredUser.email, "Please activate your account", function( error, result ){
-				if( error ){
-					req.flashError( "Error sending activation email. Please try again later. ", error );
-				} else {
-					console.log( "Sent registration email: ", result );
-					req.flashSuccess( 'Check your email. We have sent a verification email to your account' );
-				}
-				res.redirect( '/login' );
-			});
-
-		});
-	}
-
-	function getEmailVerification( req, res ){
-		var token = req.params.token;
-
-		if( !token ){
-			req.flashError( 'Verification link id invalid' );
-			req.redirect( '/login' );
-		}
-
-		User.validateEmail( token, function( error, validatedUser ){
-			if( error ){
-				req.flashError( "Validation Failed. ", error );
-			} else {
-				console.log( "Email validation complete for email: ", validatedUser.email );
-				req.flashSuccess( "Your account registration is now complete. Please login." );
+			if( user.isEmailVerified ){
+				return callback( false, user );
 			}
 
-			res.redirect( '/login' );
+			if( moment().isAfter( moment( user.emailVerificationExpiry )) ){
+				return callback( new Error( "Verification email has expired" ), user );
+			}
+
+			user.isEmailVerified = true;
+
+			user.save( callback );
 		});
-	}	
+	};
+
+	UserSchema.statics.restartEmailVerification = function( userData, callback ){
+		var User = this;
+		User.findOne( userData ).exec( function( error, user ){
+			if( error ) return callback( new Error( "Database read error" ), false );
+			if( !user ) return callback( new Error( "Verification email is invalid" ), false );
+
+			if( !user.isEmailVerified ){
+				user.emailVerificationToken = _generateEmailVerificationToken();
+				user.emailVerificationExpiry = moment().add( 10, 'm' ).toDate();
+			}
+
+			user.save( callback );
+		});
+
+	};
+
+	UserSchema.set( 'toJSON', {
+		transform: function( doc, ret, options ){
+			delete ret.passwordHash;
+			return ret;
+		}
+	});
+
+	UserSchema.set( 'toObject', {
+		transform: function( doc, ret, options ){
+			delete ret.passwordHash;
+			return ret;
+		}
+	});
+
+	function _generateEmailVerificationToken(){
+		var TOKEN_LENGTH = 40;
+		var TOKEN_CHAR_SET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		var token = "";
+		for( var i=0; i < TOKEN_LENGTH; i++ ){
+			token += TOKEN_CHAR_SET.charAt( Math.random() * TOKEN_CHAR_SET.length );
+		}
+		return token;
+	}
+
+	mongoose.model( 'User', UserSchema );
 })();
