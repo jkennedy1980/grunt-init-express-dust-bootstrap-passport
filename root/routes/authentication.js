@@ -14,8 +14,10 @@
 		app.post( '/login', postLogin );
 
 		app.get( '/logout', getLogout );
-		
+
 		app.get( '/emailverification/:token', getEmailVerification );
+
+		app.get( '/resendRegistrationValidationEmail/:email', getResendRegistrationValidationEmail );
 	};
 
 	function getLogin( req, res ){
@@ -52,8 +54,13 @@
 		};
 
 		User.register( userData, function( error, registeredUser ){
-			if( error ) return req.flashError( 'Error registering user:', error );
-			
+			if( error ){
+				req.flashError( 'Error registering user:', error );
+				var message = 'Email validation failed <a href="/resendRegistrationValidationEmail/'+email+'">Resend</a>';
+				req.flashError( message );
+				return;
+			}
+
 			if( !registeredUser ) return res.redirect( '/register' );
 
 			var activationURL = req.headers.origin + "/emailverification/" + registeredUser.emailVerificationToken;
@@ -62,11 +69,47 @@
 					req.flashError( "Error sending activation email. Please try again later. ", error );
 				} else {
 					console.log( "Sent registration email: ", result );
-					req.flashSuccess( 'Check your email. We have sent a verification email to your account' );
+					req.flashSuccess( 'Check your email. We have sent instructions to verify your account' );
 				}
 				res.redirect( '/login' );
 			});
 
+		});
+	}
+
+	function getResendRegistrationValidationEmail( req, res ){
+		var email = req.params.email;
+
+		if( !email ){
+			req.flashError( 'Email is required.' );
+			return res.redirect( '/register' );
+		}
+
+		var userData = {
+			email: email
+		};
+
+		User.restartEmailVerification( userData, function( error, user ){
+			if( error ){
+				req.flashError( "Error verifying email", error );
+				return res.redirect( '/register' );
+			}
+
+			if( user.isEmailVerified ){
+				req.flashSuccess( "Your account registration is complete. Please login. ");
+			} else {
+				var activationURL = req.headers.origin + "/emailverification/" + user.emailVerificationToken;
+
+				emailer.sendEmail( "register", { activationUrl: activationURL }, email, "Please activate your account", function( error, result ){
+					if( error ){
+						req.flashError( "Error sending activation email. Please try again later. ", error );
+					} else {
+						console.log( "Sent registration email: ", result );
+						req.flashSuccess( 'Check your email. We have sent instructions to verify your account' );
+					}
+					res.redirect( '/login' );
+				});
+			}
 		});
 	}
 
@@ -78,15 +121,20 @@
 			req.redirect( '/login' );
 		}
 
-		User.validateEmail( token, function( error, validatedUser ){
+		User.validateEmail( token, function( error, user ){
 			if( error ){
-				req.flashError( "Validation Failed. ", error );
+				console.error( 'Email validation failed. ', error );
+				req.flashError( 'Email validation failed. ', error );
+				if( user ){
+					var message = '<a href="/resendRegistrationValidationEmail/'+user.email+'">Resend Verification Email</a>';
+					req.flashError( message );
+				}
 			} else {
-				console.log( "Email validation complete for email: ", validatedUser.email );
+				console.log( "Email validation complete for email: ", user.email );
 				req.flashSuccess( "Your account registration is now complete. Please login." );
 			}
 
 			res.redirect( '/login' );
 		});
-	}	
+	}
 })();
