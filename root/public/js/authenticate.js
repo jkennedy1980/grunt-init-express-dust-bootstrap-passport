@@ -20,7 +20,7 @@ var {%= client_js_module_name %} = (function( app ){
 		function _checkPasswords(){
 			var password = $password.val();
 			var passwordStrength = {%= client_js_module_name %}.password.getPasswordStrength( password );
-			if( password.length == 0 ){
+			if( password.length === 0 ){
 				$registerButton.attr('disabled', 'disabled');
 				$passwordMessage.text('').hide();
 			} else {
@@ -48,7 +48,7 @@ var {%= client_js_module_name %} = (function( app ){
 				// EH
 				strengthColorClass = 'progress-bar-warning';
 			}
-			$passwordStrengthBar.css({width:passwordStrength+ '%'}).removeClass('progress-bar-danger progress-bar-success progress-bar-warning').addClass(strengthColorClass);
+			$passwordStrengthBar.css({width: passwordStrength + '%'}).removeClass('progress-bar-danger progress-bar-success progress-bar-warning').addClass(strengthColorClass);
 		}
 
 	};
@@ -75,7 +75,7 @@ var {%= client_js_module_name %} = (function( app ){
 		function _checkPasswords(){
 			var password = $password.val();
 			var passwordStrength = {%= client_js_module_name %}.password.getPasswordStrength( password );
-			if( password.length == 0 ){
+			if( password.length === 0 ){
 				$resetPasswordButton.attr('disabled', 'disabled');
 				$passwordMessage.text('').hide();
 			} else {
@@ -103,7 +103,7 @@ var {%= client_js_module_name %} = (function( app ){
 				// EH
 				strengthColorClass = 'progress-bar-warning';
 			}
-			$passwordStrengthBar.css({width:passwordStrength+ '%'}).removeClass('progress-bar-danger progress-bar-success progress-bar-warning').addClass(strengthColorClass);
+			$passwordStrengthBar.css({width: passwordStrength + '%'}).removeClass('progress-bar-danger progress-bar-success progress-bar-warning').addClass(strengthColorClass);
 		}
 
 
