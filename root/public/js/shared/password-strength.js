@@ -43,6 +43,6 @@ var COOLAPP = (function( app ){
 
 })( COOLAPP || {} );
 
-if( typeof exports !== undefined ){
+if( typeof module !== "undefined" && typeof exports !== "undefined" ){
     module.exports = COOLAPP.password;
 }

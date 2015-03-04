@@ -1,4 +1,4 @@
-{>"admin/admin-layout" activeNavLink="users" /}
+{>"admin/admin-layout" activeNavLink="home" /}
 
 {<body}
 
