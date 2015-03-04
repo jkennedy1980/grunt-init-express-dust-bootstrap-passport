@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{%= name %}</title>
+    <title>crap</title>
+    {@eq key=useMinifiedCss value="true" type="boolean"}
     <link rel="stylesheet" type="text/css" href="/css/main.min.css"/>
+    {:else}
+    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    {/eq}
 </head>
 <body data-controller="{data-controller}" data-action="{data-action}">
 
@@ -17,7 +21,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">{%= name %}</a>
+            <a class="navbar-brand" href="#">crap</a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-collapse-1">

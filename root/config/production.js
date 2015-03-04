@@ -2,7 +2,8 @@
 
   module.exports = {
     anEnviromentSpecificValue: "Hey there production!",
-    useMinifiedJs: true
+    useMinifiedJs: true, 
+    useMinifiedCss: true
   };
 
 })();
