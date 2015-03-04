@@ -3,6 +3,7 @@
 	module.exports = {
 		anEnviromentSpecificValue: "Hey there development!",
 		useMinifiedJs: false,
+        useMinifiedCss: false,
 		renderStackTraces: true,
 		email:{
 			enabled: true,
