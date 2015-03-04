@@ -1,22 +1,24 @@
-( function( exports ){
-    
-    if( !exports.password ) exports.password = {};
-    exports.minimumPasswordStrength = 50;
-    exports.bestPasswordStrength = 70;
+var COOLAPP = (function( app ){
+    'use strict';
 
-    exports.passwordIsSecureEnough = function( password ){
+    app.password = app.password || {};
+
+    app.password.minimumPasswordStrength = 50;
+    app.password.bestPasswordStrength = 70;
+
+    app.password.passwordIsSecureEnough = function( password ){
         var strength = exports.getPasswordStrength( password );
         return ( strength >= exports.minimumPasswordStrength );
     };
-    
-    exports.getPasswordStrength = function( password ){
+
+    app.password.getPasswordStrength = function( password ){
         if( !(typeof password == 'string' || password instanceof String) ) return 0;
-        
+
         var longPasswordLength = 15;
 
         var lengthRank = password.length;
         if( lengthRank < 6 ) lengthRank = 0;
-	    if( lengthRank > 6) lengthRank = 5;
+        if( lengthRank > 6) lengthRank = 5;
 
         var noNumbers = password.replace( /[0-9]/g, "" );
         var numbersRank = (password.length - noNumbers.length);
@@ -36,5 +38,11 @@
 
         return finalRank;
     };
-    
-})( typeof exports === 'undefined' ? this['{%= client_js_module_name %}_PasswordUtils'] = {} : exports );
+
+    return app;
+
+})( COOLAPP || {} );
+
+if( typeof exports !== undefined ){
+    module.exports = COOLAPP.password;
+}

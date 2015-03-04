@@ -6,8 +6,8 @@ var {%= client_js_module_name %} = (function( app ){
 	app.authenticate.register = function(){
 		console.log( "Running authenticate-register" );
 
-		var minimumPasswordStrength = {%= client_js_module_name %}_PasswordUtils.minimumPasswordStrength;
-		var bestPasswordStrength = {%= client_js_module_name %}_PasswordUtils.bestPasswordStrength;
+		var minimumPasswordStrength = {%= client_js_module_name %}.password.minimumPasswordStrength;
+		var bestPasswordStrength = {%= client_js_module_name %}.password.bestPasswordStrength;
 
 		var $password = $('#password');
 		var $passwordStrengthBar = $('#passwordStrength');
@@ -19,7 +19,7 @@ var {%= client_js_module_name %} = (function( app ){
 
 		function _checkPasswords(){
 			var password = $password.val();
-			var passwordStrength = {%= client_js_module_name %}_PasswordUtils.getPasswordStrength( password );
+			var passwordStrength = {%= client_js_module_name %}.password.getPasswordStrength( password );
 			if( password.length == 0 ){
 				$registerButton.attr('disabled', 'disabled');
 				$passwordMessage.text('').hide();
@@ -61,8 +61,8 @@ var {%= client_js_module_name %} = (function( app ){
 	app.authenticate.resetpassword = function(){
 		console.log( "Running authenticate-resetpassword" );
 
-		var minimumPasswordStrength = {%= client_js_module_name %}_PasswordUtils.minimumPasswordStrength;
-		var bestPasswordStrength = {%= client_js_module_name %}_PasswordUtils.bestPasswordStrength;
+		var minimumPasswordStrength = {%= client_js_module_name %}.password.minimumPasswordStrength;
+		var bestPasswordStrength = {%= client_js_module_name %}.password.bestPasswordStrength;
 		
 		var $password = $('#password');
 		var $passwordStrengthBar = $('#passwordStrength');
@@ -74,7 +74,7 @@ var {%= client_js_module_name %} = (function( app ){
 		
 		function _checkPasswords(){
 			var password = $password.val();
-			var passwordStrength = {%= client_js_module_name %}_PasswordUtils.getPasswordStrength( password );
+			var passwordStrength = {%= client_js_module_name %}.password.getPasswordStrength( password );
 			if( password.length == 0 ){
 				$resetPasswordButton.attr('disabled', 'disabled');
 				$passwordMessage.text('').hide();

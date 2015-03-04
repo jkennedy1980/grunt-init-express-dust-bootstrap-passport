@@ -102,13 +102,6 @@ module.exports = function( grunt ){
 			}
 		},
 
-		open: {
-			localServer: {
-				path: 'http://localhost',
-				app: 'Google Chrome'
-			},
-		},
-
 		retire: {
 			js: ['lib/**/*.js','app/**/*.js', 'routes/**/*.js'],
 			node: ['node']
@@ -123,8 +116,8 @@ module.exports = function( grunt ){
 	grunt.registerTask( 'lintCss', ['less', 'csslint']);
 	grunt.registerTask( 'lintJs', ['eslint']);
 
-	grunt.registerTask( 'default', ['lintJs', 'lintCss', 'compileJs', 'compileCss']);
+	grunt.registerTask( 'prepare', ['lintJs', 'lintCss', 'compileJs', 'compileCss']);
 	grunt.registerTask( 'test', ['simplemocha']);
-	grunt.registerTask( 'start', ['compileCss', 'compileJs', 'supervisor', 'open']);
+	grunt.registerTask( 'start', ['compileCss', 'compileJs', 'supervisor']);
 
 };

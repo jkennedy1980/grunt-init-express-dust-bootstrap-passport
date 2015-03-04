@@ -102,7 +102,7 @@
                 return res.redirect( '/login?' + querystring.stringify({ continueTo: req.originalUrl }) );
             }
 
-            if( !roles || roles.length == 0 ) return next();
+            if( !roles || roles.length === 0 ) return next();
 
             var user = req.user;
             for( var r = 0; r < roles.length; r++ ){

@@ -61,12 +61,15 @@
 		User.register( userData, function( error, registeredUser ){
 			if( error ){
 				req.flashError( 'Error registering user:', error );
-				var message = 'Email validation failed <a href="/resendRegistrationValidationEmail/'+email+'">Resend</a>';
+				var message = 'Email validation failed <a href="/resendRegistrationValidationEmail/' + email + '">Resend</a>';
 				req.flashError( message );
 				return;
 			}
 
-			if( !registeredUser ) return res.redirect( '/register' );
+			if( !registeredUser ){
+                res.redirect( '/register' );
+                return;
+            }
 
 			var activationURL = req.headers.origin + "/emailverification/" + registeredUser.emailVerificationToken;
 			emailer.sendEmail( "register", { activationUrl: activationURL }, registeredUser.email, "Please activate your account", function( error, result ){
@@ -131,7 +134,7 @@
 				console.error( 'Email validation failed. ', error );
 				req.flashError( 'Email validation failed. ', error );
 				if( user ){
-					var message = '<a href="/resendRegistrationValidationEmail/'+user.email+'">Resend Verification Email</a>';
+					var message = '<a href="/resendRegistrationValidationEmail/' + user.email + '">Resend Verification Email</a>';
 					req.flashError( message );
 				}
 			} else {
@@ -168,7 +171,7 @@
 					console.log( 'Email for password recovery not recognized' );
 				} else {
 					var recoveryURL = req.headers.origin + "/resetpassword/" + user.passwordRecoveryToken;
-					emailer.sendEmail( "password-recovery", { recoveryURL : recoveryURL }, email, "Follow this link to reset your password", function( error, result ){
+					emailer.sendEmail( "password-recovery", { recoveryURL: recoveryURL }, email, "Follow this link to reset your password", function( error, result ){
 						if( error ){
 							req.flashError( "Error sending password recovery email. Please try again later. ", error );
 						} else {
