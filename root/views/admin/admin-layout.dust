@@ -27,7 +27,6 @@
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
 
             <ul class="nav navbar-nav">
-                <li {@eq key=activeNavLink value="home"} class="active"{/eq}><a href="/admin"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
                 <li {@eq key=activeNavLink value="users"} class="active"{/eq}><a href="/admin/users">Users</a></li>
                 <li {@eq key=activeNavLink value="emails"} class="active"{/eq}><a href="/admin/emails">Emails</a></li>
             </ul>

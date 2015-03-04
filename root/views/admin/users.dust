@@ -1,0 +1,11 @@
+{>"admin/admin-layout" activeNavLink="users" /}
+
+{<body}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h1>Users</h1>
+    </div>
+</div>
+
+{/body}

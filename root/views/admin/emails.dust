@@ -1,0 +1,11 @@
+{>"admin/admin-layout" activeNavLink="emails" /}
+
+{<body}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h1>Emails</h1>
+    </div>
+</div>
+
+{/body}

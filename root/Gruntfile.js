@@ -15,7 +15,7 @@ module.exports = function( grunt ){
 					strictMath: true,
 					sourceMap: true,
 					outputSourceFiles: true,
-					sourceMapFilename: 'public/css/main.css.map'
+					sourceMapFilename: 'main.css.map'
 				},
 				files: {
 					'public/css/main.css': 'less/main.less'
@@ -26,7 +26,7 @@ module.exports = function( grunt ){
                     strictMath: true,
                     sourceMap: true,
                     outputSourceFiles: true,
-                    sourceMapFilename: 'public/css/admin.css.map'
+                    sourceMapFilename: 'admin.css.map'
                 },
                 files: {
                     'public/css/admin.css': 'less/admin.less'
