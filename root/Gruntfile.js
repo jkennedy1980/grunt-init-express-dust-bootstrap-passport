@@ -20,7 +20,18 @@ module.exports = function( grunt ){
 				files: {
 					'public/css/main.css': 'less/main.less'
 				}
-			}
+			},
+            admin: {
+                options: {
+                    strictMath: true,
+                    sourceMap: true,
+                    outputSourceFiles: true,
+                    sourceMapFilename: 'public/css/admin.css.map'
+                },
+                files: {
+                    'public/css/admin.css': 'less/admin.less'
+                }
+            }
 		},
 
 		csslint: {
@@ -29,7 +40,10 @@ module.exports = function( grunt ){
 			},
 			src: [
 				'public/css/main.css'
-			]
+			],
+            admin: [
+                'public/css/admin.css'
+            ]
 		},
 
 		cssmin: {
@@ -42,7 +56,12 @@ module.exports = function( grunt ){
 				files: {
 					'public/css/main.min.css': 'public/css/main.css'
 				}
-			}
+			},
+            admin: {
+                files: {
+                    'public/css/admin.min.css': 'public/css/admin.css'
+                }
+            }
 		},
 
 		uglify: {
