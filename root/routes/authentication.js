@@ -22,7 +22,7 @@
 		app.get( '/recoverpassword', getRecoverPassword );
 		app.post( '/recoverpassword', postRecoverPassword );
 		app.get( '/resetpassword/:token', getResetPassword );
-		app.post( '/resetpassword', postResetPassword );
+		app.post( '/resetpassword/:token', postResetPassword );
 	};
 
 	function getLogin( req, res ){
@@ -195,7 +195,6 @@
 				console.error( 'Password recovery validation failed. ', error );
 				req.flashError( 'Password recovery link is invalid. ', error );
 				res.redirect( '/login' );
-				return;
 			} else {
 				console.log( "Password recovery valid for email", user.email );
 				res.render( 'authentication/resetpassword' );
@@ -204,7 +203,25 @@
 	}
 	
 	function postResetPassword( req, res ){
-		res.send('reset password');
+		var token = req.params.token;
+		var password = req.body.password;
+
+		if( !token ){
+			req.flashError( 'Verification link id invalid' );
+			req.redirect( '/login' );
+		}
+
+		User.resetPasswordWithToken( token, password, function( error, user ){
+			if( error ){
+				console.error( 'Password reset failed. ', error );
+				req.flashError( 'Error resetting your password. Please try again. ', error );
+				res.redirect( '/login' );
+			} else {
+				console.log( 'Password recovery successed for user: ', user.email );
+				req.flashSuccess( 'Your password has been changed. Please login again.' );
+				res.redirect( '/login' );
+			}
+		});
 	}
 
 })();
