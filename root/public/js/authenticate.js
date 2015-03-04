@@ -49,7 +49,13 @@ var {%= client_js_module_name %} = (function( app ){
 				strengthColorClass = 'progress-bar-warning';
 			}
 			$passwordStrengthBar.css({width:passwordStrength+ '%'}).removeClass('progress-bar-danger progress-bar-success progress-bar-warning').addClass(strengthColorClass);
-		}	};
+		} 
+	}
+
+	app.authenticate.recoverpassword = function(){
+		console.log( "Running authenticate-register" );
+		
+	}
 
 	return app;
 

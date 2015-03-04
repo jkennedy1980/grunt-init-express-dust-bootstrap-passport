@@ -18,6 +18,11 @@
 		app.get( '/emailverification/:token', getEmailVerification );
 
 		app.get( '/resendRegistrationValidationEmail/:email', getResendRegistrationValidationEmail );
+
+		app.get( '/recoverpassword', getRecoverPassword );
+		app.post( '/recoverpassword', postRecoverPassword );
+		app.get( '/resetpassword/:token', getResetPassword );
+		app.post( '/resetpassword', postResetPassword );
 	};
 
 	function getLogin( req, res ){
@@ -137,4 +142,69 @@
 			res.redirect( '/login' );
 		});
 	}
+
+	function getRecoverPassword( req, res ){
+		res.render('authentication/recoverpassword' );
+	}
+	
+	function postRecoverPassword( req, res ){
+		var email = req.body.email;
+
+		if( !email ){
+			req.flashError( 'Email is required.' );
+			return res.redirect( '/register' );
+		}
+
+		var userData = {
+			email: email
+		};
+
+		User.getPasswordRecoveryToken( userData, function( error, user ){
+			
+			if( error ){
+				console.error( 'Account lookup failed ' + email + ':', error  );
+			} else {
+				if( !user ){
+					console.log( 'Email for password recovery not recognized' );
+				} else {
+					var recoveryURL = req.headers.origin + "/resetpassword/" + user.passwordRecoveryToken;
+					emailer.sendEmail( "password-recovery", { recoveryURL : recoveryURL }, email, "Follow this link to reset your password", function( error, result ){
+						if( error ){
+							req.flashError( "Error sending password recovery email. Please try again later. ", error );
+						} else {
+							console.log( "Sent recovery email: ", result );
+							req.flashSuccess( 'Check your email. We have sent instructions to recover your password' );
+						}
+						res.redirect( '/login' );
+					});
+				}
+			}
+		});
+	}
+	
+	function getResetPassword( req, res ){
+		var token = req.params.token;
+
+		if( !token ){
+			req.flashError( 'Verification link id invalid' );
+			req.redirect( '/login' );
+		}
+		
+		User.validatePasswordRecoveryToken( token, function( error, user ){
+			if( error ){
+				console.error( 'Password recovery validation failed. ', error );
+				req.flashError( 'Password recovery link is invalid. ', error );
+				res.redirect( '/login' );
+				return;
+			} else {
+				console.log( "Password recovery valid for email", user.email );
+				res.render( 'authentication/resetpassword' );
+			}
+		});
+	}
+	
+	function postResetPassword( req, res ){
+		res.send('reset password');
+	}
+
 })();
