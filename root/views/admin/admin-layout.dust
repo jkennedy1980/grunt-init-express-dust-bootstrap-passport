@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{%=name%}</title>
+    <title>{%=name%} Admin</title>
     {@eq key=useMinifiedCss value="true" type="boolean"}
-    <link rel="stylesheet" type="text/css" href="/css/main.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/admin.min.css"/>
     {:else}
-    <link rel="stylesheet" type="text/css" href="/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/admin.css"/>
     {/eq}
 </head>
 <body data-controller="{data-controller}" data-action="{data-action}">
@@ -21,29 +21,23 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">{%=name%}</a>
+            <a class="navbar-brand" href="/admin">{%=name%} Admin</a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-collapse-1">
 
             <ul class="nav navbar-nav">
-                {?user}
-                <li {@eq key=activeNavLink value="protected"} class="active"{/eq}><a href="/protected">Protected Link</a></li>
-                {/user}
+                <li {@eq key=activeNavLink value="users"} class="active"{/eq}><a href="/admin/users">Users</a></li>
+                <li {@eq key=activeNavLink value="emails"} class="active"{/eq}><a href="/admin/emails">Emails</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                {?user}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">{user.email} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="/logout">Logout</a></li>
                     </ul>
                 </li>
-                {:else}
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                {/user}
             </ul>
         </div><!-- /.navbar-collapse -->
 

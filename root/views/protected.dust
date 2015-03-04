@@ -1,4 +1,4 @@
-{>main-layout activeNavLink="login" /}
+{>main-layout activeNavLink="protected" /}
 
 {<body}
 
