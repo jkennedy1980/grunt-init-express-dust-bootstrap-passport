@@ -1,0 +1,49 @@
+{>"admin/admin-layout" activeNavLink="users" /}
+
+{<body}
+
+<div class="row">
+    <div class="col-xs-12">
+        <h1>{userToEdit.email}</h1>
+        {userRoles|js|s}
+    </div>
+</div>
+
+<form method="POST">
+    <input type="hidden" name="_csrf" value="{_csrf}" />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <br/>
+            <table class="table">
+               <tr>
+                   <th>Email</th>
+                   <td>{userToEdit.email}</td>
+               </tr>
+               <tr>
+                   <th>Verified</th>
+                   <td>{@eq key=isEmailVerified value="true" type="boolean"}<span class="label label-success">Verified</span>{:else}<span class="label label-danger">Not Verified</span>{/eq}</td>
+               </tr>
+               <tr>
+                   <th>Roles</th>
+                   <td>
+                        {#usersRoles}
+                        <div class="checkbox">
+                            <label><input type="checkbox" value="{role}" name="roles[]" {@eq key=hasRole value="true" type="boolean"} checked="true"{/eq}>{bootstrapLabel|s}</label>
+                        </div>
+                        {/usersRoles}
+                   </td>
+               </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-xs-12">
+            <a href="/admin/users" class="btn btn-default btn-lg">Back to all Users</a> 
+            <input type="submit" class="btn btn-primary btn-lg" value="Update User" />
+        </div>
+    </div>
+    
+</form>
+{/body}
