@@ -39,6 +39,7 @@ exports.template = function( grunt, init, done ){
 		init.prompt('author_name'),
 		init.prompt('author_email'),
 		init.prompt('author_url'),
+		init.prompt('admin_account_password', _randomPassword() ),
 		init.prompt('node_version', '>= 0.10.0'),
 		init.prompt('client_js_module_name', 'COOLAPP' ),
 		init.prompt('mongo_db_name', 'CoolDB' )
@@ -113,4 +114,12 @@ exports.template = function( grunt, init, done ){
 
 	});
 
+	function _randomPassword(){
+		var source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY01234567890@#$%^&*";
+		var password = "";
+		for( var i=0; i < 8; i++ ){
+			password += source.charAt( Math.random() * source.length );
+		}
+		return password;
+	}
 };

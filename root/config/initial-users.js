@@ -7,13 +7,8 @@
 		initial_users : [
 			{
 				email : "admin@{%= name %}.com",
-				password : "password",
+				password : "{%= admin_account_password %}",
 				roles : [ UserRoles.ADMIN ]
-			},
-			{
-				email : "{%= author_email %}",
-				password : "password",
-				roles : []
 			}
 		]
 	};
