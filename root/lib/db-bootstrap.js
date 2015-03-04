@@ -8,7 +8,7 @@
 
 	var MongoStore = false;
 
-	exports.connect = function( ){
+	exports.connect = function( callback ){
 		MongoStore = require('connect-mongo')( session );
 
 		var connectionString = config.get("mongo.connectionString");
@@ -19,6 +19,8 @@
 			} else {
 				console.log( "Connected to Mongo".green );
 			}
+
+			if( callback ) callback( error );
 		});
 
 		requireMany( '../models' );
