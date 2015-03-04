@@ -15,11 +15,7 @@ exports.notes = '_Project name_ shouldn\'t contain "node" or "js" and should ' +
 
 // Template-specific notes to be displayed after question prompts.
 exports.after = 'You should now install project dependencies with _npm ' +
-	'install_. After that, you may execute project tasks with _grunt_. For ' +
-	'more information about installing and configuring Grunt, please see ' +
-	'the Getting Started guide:' +
-	'\n\n' +
-	'http://gruntjs.com/getting-started';
+	'install_. After that, run _grunt prepare_, and/or _grunt start_ ';
 
 // Any existing file or directory matching this wildcard will cause a warning.
 exports.warnOn = '*';
@@ -39,6 +35,7 @@ exports.template = function( grunt, init, done ){
 		init.prompt('author_name'),
 		init.prompt('author_email'),
 		init.prompt('author_url'),
+		init.prompt('admin_account_password', _randomPassword() ),
 		init.prompt('node_version', '>= 0.10.0'),
 		init.prompt('client_js_module_name', 'COOLAPP' ),
 		init.prompt('mongo_db_name', 'CoolDB' )
@@ -113,4 +110,12 @@ exports.template = function( grunt, init, done ){
 
 	});
 
+	function _randomPassword(){
+		var source = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY01234567890@#$%^&*";
+		var password = "";
+		for( var i=0; i < 8; i++ ){
+			password += source.charAt( Math.random() * source.length );
+		}
+		return password;
+	}
 };

@@ -27,20 +27,30 @@ var consolidate = require('consolidate');
 require('../lib/dust-helpers.js')( dust );
 var dbBootstrap = require('../lib/db-bootstrap');
 var authentication = require('../lib/authentication');
-
+var usersBootstrap = require('../lib/users-bootstrap');
 
 // LOAD CONFIGURATION
 config
 	.setOptions( { debug: true } )
 	.findEnvironment({ env: 'ENVIRONMENT', default:'dev' })
 	.useObject( require('../config/common') )
+	.useObject( require('../config/initial-users') )
 	.when(['dev']).useObject( require('../config/development') )
 	.when(['prod', 'production', 'stage']).useObject( require('../config/production') );
-console.log( "Loaded Configuration: ", config.getEnvironment() );
+
 config.list();
 
 // Must be after configuration is loaded
-dbBootstrap.connect();
+dbBootstrap.connect( function( error ){
+
+	// Must be after configuration and database loaded
+	usersBootstrap.setupInitialUsers( function( error ){
+		if( error ){
+			console.error( 'Users Bootstrapping failed. ', error );
+		}
+	});
+});
+
 
 app.set('views', path.join(__dirname, '../views'));
 app.set('showStackError', true);

@@ -1,6 +1,15 @@
 # grunt-init-express-dust-bootstrap-passport
 
-> Creates a Nnode.js server app with [grunt-init][], including Express, Dust, Bootstrap, Mongoose, Passport, Mocha, & ESlint.
+Start a node.js server app with [grunt-init][]
+
+Includes and connects:
+- Express
+- Dust
+- Bootstrap
+- Mongoose
+- Passport
+- Mocha
+- ESlint.
 
 [grunt-init]: http://gruntjs.com/project-scaffolding
 
@@ -14,11 +23,17 @@ git clone https://github.com/jkennedy1980/grunt-init-express-dust-bootstrap.git 
 
 _(Windows users, see [the documentation][grunt-init] for the correct destination directory path)_
 
-Then, run the following command in the root folder for your project:
+Then, run the following command in the empty root folder for your project:
+
 ```
 grunt-init grunt-init-express-dust-bootstrap
 ```
 
+## Initial Accounts
+
+You will be prompted to configure your server's first admin account (email and password). 
+These credentials will be written into a config file (_config/intitial-users.js_). Be sure
+to remove this configuration file before deploying your project.
 
 ## Setting up SMTP to send email
 By default, your app will be configured to use GMAIL as an SMTP relay. In order to use GMAIL, you'll need to get an app password from Google.
