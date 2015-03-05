@@ -21,7 +21,7 @@
 
 		var User = mongoose.model('User');
 
-		User.findOne( { email: userData.email } ).exec( function( error, user ){
+		User.findByEmail( userData.email, function( error, user ){
 			if( error ) return callback( error );
 			if( user ) return callback( false );
 
