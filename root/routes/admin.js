@@ -5,6 +5,10 @@
     var User = mongoose.model('User');
     var UserRoles = require('../lib/UserRoles.js');
     var _ = require('underscore');
+    var config = require('pony-config');
+    var fs = require("fs");
+    var path = require("path");
+    var emailer = require('../lib/emailer');
 
     module.exports = function( app ){
         app.get( "/admin", authentication.protectAdmin, getAdmin );
@@ -17,6 +21,7 @@
         app.post( "/admin/users/:userId/delete", authentication.protectAdmin, postUserDelete );
 
         app.get( "/admin/emails", authentication.protectAdmin, getEmails );
+        app.get( "/admin/emails/:template", authentication.protectAdmin, getEmail );
     };
 
     function getAdmin( req, res ){
@@ -45,12 +50,12 @@
             res.render( 'admin/user', { userToEdit: user, usersRoles: usersRoles } );
         });
     }
-    
+
     function getUserConfirmDelete( req, res ){
         User.findById( req.params.userId, function( error, user ){
             if( error ) req.flashError( 'Error getting user: ', error );
             res.render( 'admin/confirm-user-delete', { userToDelete: user } );
-        }); 
+        });
     }
 
     function postUserDelete( req, res ){
@@ -60,7 +65,7 @@
                 res.redirect( "/admin/users" );
                 return;
             }
-            
+
             user.remove( function( error, result ){
                 if( error ){
                     req.flashError( 'Error deleting user: ', error );
@@ -71,7 +76,7 @@
             });
         });
     }
-    
+
     function postUser( req, res ){
         User.findById( req.params.userId, function( error, user ){
             if( error ){
@@ -94,7 +99,29 @@
     }
 
     function getEmails( req, res ){
-        res.render('admin/emails');
+        var templatesPath = config.get("email.templatesPath");
+        fs.readdir( templatesPath, function( err, list ){
+            var templates = [];
+            _.each( list, function( filename ){
+                var stat = fs.statSync( path.join( templatesPath, filename ) );
+                if( stat.isDirectory() ) templates.push( filename );
+            });
+            res.render( 'admin/emails', {templates: templates });
+        });
+    }
+
+    function getEmail( req, res ){
+        var template = req.params.template;
+
+        var templateData = config.get("email.testData." + template );
+        if( !templateData ){
+            req.flashError( "No template data found for template named '" + template + "' inside /config/email-test-data.js" );
+            return res.redirect( "/admin/emails" );
+        }
+
+        emailer.sendEmail( template, templateData, false, false, function( error, result ){
+            res.render( "admin/email-results", { result: result, error: error });
+        });
     }
 
 })();

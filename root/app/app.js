@@ -1,9 +1,9 @@
 /*
- * {%= name %}
- * {%= homepage %}
+ * crap
+ * https://github.com/jkennedy/crap
  *
- * Copyright (c) {%= grunt.template.today('yyyy') %} {%= author_name %}
- * Licensed under the {%= licenses.join(', ') %} license{%= licenses.length === 1 ? '' : 's' %}.
+ * Copyright (c) 2015 Josh Kennedy
+ * Licensed under the MIT license.
  */
 
 var express = require('express');
@@ -31,24 +31,25 @@ var usersBootstrap = require('../lib/users-bootstrap');
 
 // LOAD CONFIGURATION
 config
-	.setOptions( { debug: true } )
-	.findEnvironment({ env: 'ENVIRONMENT', default:'dev' })
-	.useObject( require('../config/common') )
-	.useObject( require('../config/initial-users') )
-	.when(['dev']).useObject( require('../config/development') )
-	.when(['prod', 'production', 'stage']).useObject( require('../config/production') );
+    .setOptions( { debug: true } )
+    .findEnvironment({ env: 'ENVIRONMENT', default:'dev' })
+    .useObject( require('../config/common') )
+    .useObject( require('../config/initial-users') )
+    .useObject( require('../config/email-test-data') )
+    .when(['dev']).useObject( require('../config/development') )
+    .when(['prod', 'production', 'stage']).useObject( require('../config/production') );
 
 config.list();
 
 // Must be after configuration is loaded
 dbBootstrap.connect( function( error ){
 
-	// Must be after configuration and database loaded
-	usersBootstrap.setupInitialUsers( function( error ){
-		if( error ){
-			console.error( 'Users Bootstrapping failed. ', error );
-		}
-	});
+    // Must be after configuration and database loaded
+    usersBootstrap.setupInitialUsers( function( error ){
+        if( error ){
+            console.error( 'Users Bootstrapping failed. ', error );
+        }
+    });
 });
 
 
@@ -70,19 +71,19 @@ app.use( dbBootstrap.mongoExpressSession() );
 authentication.init( app );
 
 app.use( lusca({
-	csrf: true,
-	csp: {
-		policy: {
-			'default-src': '\'self\' *.googleapis.com',
-			'img-src': '\'self\'',
-			'script-src': '\'self\' \'unsafe-inline\' *.googleapis.com',
-			'style-src': '\'self\' \'unsafe-inline\''
-		}
-	},
-	xframe: 'SAMEORIGIN',
-	p3p: false,
-	hsts: { maxAge: 31536000, includeSubDomains: true },
-	xssProtection: true
+    csrf: true,
+    csp: {
+        policy: {
+            'default-src': '\'self\' *.googleapis.com',
+            'img-src': '\'self\'',
+            'script-src': '\'self\' \'unsafe-inline\' *.googleapis.com',
+            'style-src': '\'self\' \'unsafe-inline\''
+        }
+    },
+    xframe: 'SAMEORIGIN',
+    p3p: false,
+    hsts: { maxAge: 31536000, includeSubDomains: true },
+    xssProtection: true
 }));
 
 app.use( flash() );
@@ -101,6 +102,6 @@ require('../lib/emailer');
 app.set( 'port', config.get("port") );
 
 var server = app.listen( app.get('port'), function(){
-	var message = '{%= name %} server is listening on port ' + server.address().port
-	console.log( message.green );
+    var message = 'crap server is listening on port ' + server.address().port
+    console.log( message.green );
 });
