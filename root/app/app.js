@@ -1,9 +1,9 @@
 /*
- * crap
- * https://github.com/jkennedy/crap
+ * {%= name %}
+ * {%= homepage %}
  *
- * Copyright (c) 2015 Josh Kennedy
- * Licensed under the MIT license.
+ * Copyright (c) {%= grunt.template.today('yyyy') %} {%= author_name %}
+ * Licensed under the {%= licenses.join(', ') %} license{%= licenses.length === 1 ? '' : 's' %}.
  */
 
 var express = require('express');
@@ -102,6 +102,6 @@ require('../lib/emailer');
 app.set( 'port', config.get("port") );
 
 var server = app.listen( app.get('port'), function(){
-    var message = 'crap server is listening on port ' + server.address().port
+    var message = '{%= name %} server is listening on port ' + server.address().port
     console.log( message.green );
 });

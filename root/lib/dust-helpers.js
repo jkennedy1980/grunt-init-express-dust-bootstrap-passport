@@ -37,7 +37,7 @@
         var user = params.user;
         for( var r = 0; r < user.roles.length; r++ ){
             var role = user.roles[r];
-            html +=  UserRoles.bootstrapLabelForRole( role ) + " ";
+            html += UserRoles.bootstrapLabelForRole( role ) + " ";
         }
         return chunk.write( html );
     }
