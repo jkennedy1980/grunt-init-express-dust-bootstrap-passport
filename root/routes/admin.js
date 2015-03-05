@@ -101,6 +101,7 @@
     function getEmails( req, res ){
         var templatesPath = config.get("email.templatesPath");
         fs.readdir( templatesPath, function( err, list ){
+			if( err ) throw err;
             var templates = [];
             _.each( list, function( filename ){
                 var stat = fs.statSync( path.join( templatesPath, filename ) );

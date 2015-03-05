@@ -33,7 +33,7 @@
 		],
 		email:{
 			enabled: false,
-            fromEmail: "accounts@crap.com",
+            fromEmail: "accounts@{%= name %}.com",
 			templatesPath: path.join( __dirname, '/../views/emails' )
 		}
 	};

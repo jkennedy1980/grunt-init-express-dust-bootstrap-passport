@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>crap Admin</title>
+    <title>{%= name %} Admin</title>
     {@eq key=useMinifiedCss value="true" type="boolean"}
     <link rel="stylesheet" type="text/css" href="/css/admin.min.css"/>
     {:else}
@@ -21,7 +21,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/admin">crap Admin</a>
+            <a class="navbar-brand" href="/admin">{%= name %} Admin</a>
         </div>
 
         <div class="collapse navbar-collapse" id="navbar-collapse-1">

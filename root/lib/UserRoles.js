@@ -13,6 +13,6 @@
             bootstrapColor = 'danger';
         }
         return "<span class='label label-" + bootstrapColor + "'>" + role + "</span>";
-    }
+    };
 
 })();
