@@ -3,8 +3,8 @@
 {<body}
 <table>
     <tr>
-        <td align="center" class="masthead">
-            <h1>Hello!</h1>
+        <td class="masthead">
+            <h1>Welcome to {%=name%}</h1>
         </td>
     </tr>
     <tr>

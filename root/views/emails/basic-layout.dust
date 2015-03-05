@@ -16,7 +16,7 @@
             <table>
                 <tr>
                     <td class="content footer" align="center">
-                        FOOTER
+                        Copyright 2015 {%=name%}
                     </td>
                 </tr>
             </table>
