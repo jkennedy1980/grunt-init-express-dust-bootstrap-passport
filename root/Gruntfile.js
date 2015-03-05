@@ -8,31 +8,33 @@ module.exports = function( grunt ){
 
 		pkg: grunt.file.readJSON('package.json'),
 		commonConfig: require('./config/common'),
-        
-		less: {
-			src: {
-				options: {
-					strictMath: true,
-					sourceMap: true,
-					outputSourceFiles: true,
-					sourceMapFilename: 'main.css.map'
-				},
-				files: {
-					'public/css/main.css': 'less/main.less'
-				}
-			},
+
+        less: {
+            src: {
+                options: {
+                    strictMath: true,
+                    sourceMap: true,
+                    outputSourceFiles: true,
+                    sourceMapFilename: 'public/css/main.css.map',
+                    sourceMapURL: '/css/main.css.map'
+                },
+                files: {
+                    'public/css/main.css': 'less/main.less'
+                }
+            },
             admin: {
                 options: {
                     strictMath: true,
                     sourceMap: true,
                     outputSourceFiles: true,
-                    sourceMapFilename: 'admin.css.map'
+                    sourceMapFilename: 'public/css/admin.css.map',
+                    sourceMapURL: '/css/admin.css.map'
                 },
                 files: {
                     'public/css/admin.css': 'less/admin.less'
                 }
             }
-		},
+        },
 
 		csslint: {
 			options: {
