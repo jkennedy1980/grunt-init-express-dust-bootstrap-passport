@@ -39,8 +39,7 @@
 
     <div class="row">
         <div class="col-xs-12">
-            <a href="/admin/users" class="btn btn-default btn-lg">Back to all Users</a>
-            <input type="submit" class="btn btn-primary btn-lg" value="Update User" />
+            <a href="/admin/users" class="btn btn-default btn-lg">Back to all Users</a>&nbsp;&nbsp;<input type="submit" class="btn btn-primary btn-lg" value="Update User" />
         </div>
     </div>
 
@@ -53,7 +52,7 @@
                 </div>
                 <div class="panel-body">
                     <p>Deleting this user will be permanent and unrecoverable.</p>
-                    <a href="/admin/users/{userToEdit.id}/delete/confirm" class="btn btn-danger btn-lg">Delete User</a>
+                    <a href="/admin/users/{userToEdit.id}/delete/confirm" class="btn btn-danger">Delete User</a>
                 </div>
             </div>
         </div>

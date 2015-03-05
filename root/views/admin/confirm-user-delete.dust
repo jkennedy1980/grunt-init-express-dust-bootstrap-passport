@@ -2,18 +2,23 @@
 
 {<body}
 
-<form method="POST" actio="/admin/users/{userToDelete.id}/delete"
-<div class="row">
-    <div class="col-xs-12">
-        <div class="jumbotron">
-            <h1>Delete User?</h1>
-            <p>Are you sure you want to delete {userToDelete.email}? Deleting this user will be permanent and unrecoverable.</p>
-            <p>
-                <a class="btn btn-default btn-lg" href="#" role="button">No, Do not Delete</a>
-                <a class="btn btn-danger btn-lg" href="#" role="button">Yes, Delete Forever</a>
-            </p>
+<form method="POST" action="/admin/users/{userToDelete.id}/delete">
+    <input type="hidden" name="_csrf" value="{_csrf}" />
+
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="jumbotron">
+                <h1>Delete User?</h1>
+                <br/>
+                <p>Are you sure you want to delete {userToDelete.email}? Deleting this user will be permanent and unrecoverable.</p>
+                <p>
+                    <br/>
+                    <a class="btn btn-default btn-lg" href="/admin/users/{userToDelete.id}" role="button">No, Do not Delete</a>&nbsp;&nbsp;<input type="submit" class="btn btn-danger btn-lg"role="button" value="Yes, Delete Forever"/>
+                </p>
+            </div>
         </div>
     </div>
-</div>
+
+</form>
 
 {/body}
