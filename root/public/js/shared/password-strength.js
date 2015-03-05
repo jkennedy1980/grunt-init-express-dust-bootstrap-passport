@@ -1,4 +1,4 @@
-var COOLAPP = (function( app ){
+var {%= client_js_module_name %} = (function( app ){
     'use strict';
 
     app.password = app.password || {};
@@ -41,8 +41,8 @@ var COOLAPP = (function( app ){
 
     return app;
 
-})( COOLAPP || {} );
+})( {%= client_js_module_name %} || {} );
 
 if( typeof module !== "undefined" && typeof exports !== "undefined" ){
-    module.exports = COOLAPP.password;
+    module.exports = {%= client_js_module_name %}.password;
 }
