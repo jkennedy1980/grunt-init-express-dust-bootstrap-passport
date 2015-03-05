@@ -38,7 +38,7 @@
                 passwordField: 'password'
             },
             function( email, password, done ){
-                User.findOne({ email: email }, function( error, user ){
+	            User.findByEmail( email, function( error, user ){
                     if( error ) return done( error );
                     if( !user ) return done( null, false, { message: 'Incorrect email or password.' } );
 

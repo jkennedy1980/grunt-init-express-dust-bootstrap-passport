@@ -158,11 +158,7 @@
 			return res.redirect( '/register' );
 		}
 
-		var userData = {
-			email: email
-		};
-
-		User.getPasswordRecoveryToken( userData, function( error, user ){
+		User.getPasswordRecoveryToken( email, function( error, user ){
 			
 			if( error ){
 				console.error( 'Account lookup failed ' + email + ':', error  );

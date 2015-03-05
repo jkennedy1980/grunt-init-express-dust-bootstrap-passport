@@ -28,7 +28,12 @@
         return this.hasRole( UserRoles.ADMIN );
     };
 
-    UserSchema.statics.register = function( userData, callback ){
+	UserSchema.statics.findByEmail = function( email, callback ){
+		var User = this;
+		User.findOne( { email : email.toLowerCase() } ).exec( callback );
+	};
+	
+	UserSchema.statics.register = function( userData, callback ){
         var User = this;
         var user = new User();
         user.email = userData.email;
@@ -67,10 +72,10 @@
         });
     };
 
-    UserSchema.statics.getPasswordRecoveryToken = function( userData, callback ){
+    UserSchema.statics.getPasswordRecoveryToken = function( email, callback ){
         var User = this;
 
-        User.findOne( userData ).exec( function( error, user ){
+        User.findByEmail( email, function( error, user ){
             if( error ) return callback( new Error( "Database read error" ), false );
             if( !user ) return callback( new Error( "Recovery email invalid." ), false );
 

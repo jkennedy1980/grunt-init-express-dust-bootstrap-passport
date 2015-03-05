@@ -54,7 +54,7 @@ exports.template = function( grunt, init, done ){
 		props.dependencies = {
 			"express": "~4.11.1",
 			"debug": "~2.1.1",
-			"underscore": "~1.7.0",
+			"lodash": "^3.3.1",
 			"request": "~2.51.0",
 			"async": "~0.9.0",
 			"connect-flash": "~0.1.1",

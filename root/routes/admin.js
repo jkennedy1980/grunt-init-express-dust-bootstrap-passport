@@ -4,7 +4,7 @@
     var mongoose = require('mongoose');
     var User = mongoose.model('User');
     var UserRoles = require('../lib/UserRoles.js');
-    var _ = require('underscore');
+    var _ = require('lodash');
     var config = require('pony-config');
     var fs = require("fs");
     var path = require("path");
