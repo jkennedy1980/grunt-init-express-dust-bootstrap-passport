@@ -13,6 +13,9 @@
         app.get( "/admin/users/:userId", authentication.protectAdmin, getUser );
         app.post( "/admin/users/:userId", authentication.protectAdmin, postUser );
 
+        app.get( "/admin/users/:userId/delete/confirm", authentication.protectAdmin, getUserConfirmDelete );
+        app.post( "/admin/users/:userId/delete", authentication.protectAdmin, postUserDelete );
+
         app.get( "/admin/emails", authentication.protectAdmin, getEmails );
     };
 
@@ -42,7 +45,33 @@
             res.render( 'admin/user', { userToEdit: user, usersRoles: usersRoles } );
         });
     }
+    
+    function getUserConfirmDelete( req, res ){
+        User.findById( req.params.userId, function( error, user ){
+            if( error ) req.flashError( 'Error getting user: ', error );
+            res.render( 'admin/confirm-user-delete', { userToDelete: user } );
+        }); 
+    }
 
+    function postUserDelete( req, res ){
+        User.findById( req.params.userId, function( error, user ){
+            if( error ){
+                req.flashError( 'Error deleting user: ', error );
+                res.redirect( "/admin/users" );
+                return;
+            }
+            
+            user.remove( function( error, result ){
+                if( error ){
+                    req.flashError( 'Error deleting user: ', error );
+                }else{
+                    req.flashSuccess( 'Successfully deleted ' + user.email );
+                }
+                res.redirect( "/admin/users" );
+            });
+        });
+    }
+    
     function postUser( req, res ){
         User.findById( req.params.userId, function( error, user ){
             if( error ){

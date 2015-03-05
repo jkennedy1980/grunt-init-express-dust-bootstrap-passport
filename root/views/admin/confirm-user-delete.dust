@@ -1,0 +1,19 @@
+{>"admin/admin-layout" activeNavLink="users" /}
+
+{<body}
+
+<form method="POST" actio="/admin/users/{userToDelete.id}/delete"
+<div class="row">
+    <div class="col-xs-12">
+        <div class="jumbotron">
+            <h1>Delete User?</h1>
+            <p>Are you sure you want to delete {userToDelete.email}? Deleting this user will be permanent and unrecoverable.</p>
+            <p>
+                <a class="btn btn-default btn-lg" href="#" role="button">No, Do not Delete</a>
+                <a class="btn btn-danger btn-lg" href="#" role="button">Yes, Delete Forever</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+{/body}
