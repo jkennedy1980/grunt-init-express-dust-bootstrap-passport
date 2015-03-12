@@ -1,23 +1,31 @@
 ( function(){
 	'use strict';
-	
+
 	var config = require('pony-config');
 	var mongoose = require('mongoose');
-	var async = require('async');
 	var authentication = require('./authentication');
+	var UserRoles = require('../lib/UserRoles.js');
 
 	exports.setupInitialUsers = function( callback ){
+		var User = mongoose.model('User');
+		var initialAdminUser = config.get('initial_admin_user');
+		if( ! initialAdminUser ) return callback( false );
 
-		var initialUsers = config.get('initial_users');
+		User.findOne( { roles : UserRoles.ADMIN }, function( error, user ){
+			if( error ){
+				console.error( "Failed to determine is an admin account exists:", error );
+				return callback( error );
+			}
 
-		if( initialUsers && initialUsers.length ){
-			async.each( initialUsers, _insertInitialUserWithData, callback );
-		} else {
-			callback( false );
-		}
+			if( !user ){
+				_insertInitialAdminUserWithData( initialAdminUser, callback );
+			} else {
+				callback( false );
+			}
+		});
 	};
 
-	function _insertInitialUserWithData( userData, callback ){
+	function _insertInitialAdminUserWithData( userData, callback ){
 
 		var User = mongoose.model('User');
 
