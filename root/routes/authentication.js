@@ -39,10 +39,12 @@
 	}
 
 	function getRegister( req, res ){
-		res.render('authentication/register');
+		res.render('authentication/register', {continueTo: req.query.continueTo });
 	}
 
 	function postRegister( req, res ){
+        var returnURL = '/register?continueTo=' + req.query.continueTo;
+        var continueURL = '/login?continueTo=' + req.query.continueTo;
 
 		//TODO: sanitize sterlize and homongenize
 		var email = req.body.email;
@@ -50,7 +52,7 @@
 
 		if( !email || !password ){
 			req.flashError( 'Email and password are required.' );
-			return res.redirect( '/register' );
+			return res.redirect( returnURL );
 		}
 
 		var userData = {
@@ -61,17 +63,17 @@
 		User.register( userData, function( error, registeredUser ){
 			if( error ){
 				req.flashError( 'Error registering user:', error );
-				var message = 'Email validation failed <a href="/resendRegistrationValidationEmail/' + email + '">Resend</a>';
+				var message = 'Email validation failed <a href="/resendRegistrationValidationEmail/' + email + '?continueTo=' + req.query.continueTo + '">Resend</a>';
 				req.flashError( message );
 				return;
 			}
 
 			if( !registeredUser ){
-                res.redirect( '/register' );
+                res.redirect( returnURL );
                 return;
             }
 
-			var activationURL = req.headers.origin + "/emailverification/" + registeredUser.emailVerificationToken;
+			var activationURL = req.headers.origin + "/emailverification/" + registeredUser.emailVerificationToken + '?continueTo=' + req.query.continueTo;
 			emailer.sendEmail( "register", { activationUrl: activationURL }, registeredUser.email, "Please activate your account", function( error, result ){
 				if( error ){
 					req.flashError( "Error sending activation email. Please try again later. ", error );
@@ -79,18 +81,21 @@
 					console.log( "Sent registration email: ", result );
 					req.flashSuccess( 'Check your email. We have sent instructions to verify your account' );
 				}
-				res.redirect( '/login' );
+				res.redirect( continueURL );
 			});
 
 		});
 	}
 
 	function getResendRegistrationValidationEmail( req, res ){
-		var email = req.params.email;
+        var returnURL = '/register?continueTo=' + req.query.continueTo;
+        var continueURL = '/login?continueTo=' + req.query.continueTo;
+
+        var email = req.params.email;
 
 		if( !email ){
 			req.flashError( 'Email is required.' );
-			return res.redirect( '/register' );
+			return res.redirect( returnURL );
 		}
 
 		var userData = {
@@ -100,7 +105,7 @@
 		User.restartEmailVerification( userData, function( error, user ){
 			if( error ){
 				req.flashError( "Error verifying email", error );
-				return res.redirect( '/register' );
+				return res.redirect( returnURL );
 			}
 
 			if( user.isEmailVerified ){
@@ -115,18 +120,19 @@
 						console.log( "Sent registration email: ", result );
 						req.flashSuccess( 'Check your email. We have sent instructions to verify your account' );
 					}
-					res.redirect( '/login' );
+					res.redirect( continueURL );
 				});
 			}
 		});
 	}
 
 	function getEmailVerification( req, res ){
+        var returnURL = '/login?continueTo=' + req.query.continueTo;
 		var token = req.params.token;
 
 		if( !token ){
 			req.flashError( 'Verification link id invalid' );
-			req.redirect( '/login' );
+			req.redirect( returnURL );
 		}
 
 		User.validateEmail( token, function( error, user ){
@@ -142,20 +148,22 @@
 				req.flashSuccess( "Your account registration is now complete. Please login." );
 			}
 
-			res.redirect( '/login' );
+			res.redirect( returnURL );
 		});
 	}
 
 	function getRecoverPassword( req, res ){
-		res.render('authentication/recoverpassword' );
+		res.render('authentication/recoverpassword', {continueTo: req.query.continueTo });
 	}
 	
 	function postRecoverPassword( req, res ){
+        var returnURL = '/login?continueTo=' + req.query.continueTo;
+
 		var email = req.body.email;
 
 		if( !email ){
 			req.flashError( 'Email is required.' );
-			return res.redirect( '/register' );
+			return res.redirect( returnURL );
 		}
 
 		User.getPasswordRecoveryToken( email, function( error, user ){
@@ -166,7 +174,7 @@
 				if( !user ){
 					console.log( 'Email for password recovery not recognized' );
 				} else {
-					var recoveryURL = req.headers.origin + "/resetpassword/" + user.passwordRecoveryToken;
+					var recoveryURL = req.headers.origin + "/resetpassword/" + user.passwordRecoveryToken + '?continueTo=' + req.query.continueTo;
 					emailer.sendEmail( "password-recovery", { recoveryURL: recoveryURL }, email, "Follow this link to reset your password", function( error, result ){
 						if( error ){
 							req.flashError( "Error sending password recovery email. Please try again later. ", error );
@@ -174,7 +182,7 @@
 							console.log( "Sent recovery email: ", result );
 							req.flashSuccess( 'Check your email. We have sent instructions to recover your password' );
 						}
-						res.redirect( '/login' );
+						res.redirect( returnURL );
 					});
 				}
 			}
@@ -182,43 +190,45 @@
 	}
 	
 	function getResetPassword( req, res ){
+        var returnURL = '/login?continueTo=' + req.query.continueTo;
 		var token = req.params.token;
 
 		if( !token ){
 			req.flashError( 'Verification link id invalid' );
-			req.redirect( '/login' );
+			req.redirect( returnURL );
 		}
 		
 		User.validatePasswordRecoveryToken( token, function( error, user ){
 			if( error ){
 				console.error( 'Password recovery validation failed. ', error );
 				req.flashError( 'Password recovery link is invalid. ', error );
-				res.redirect( '/login' );
+				res.redirect( returnURL );
 			} else {
 				console.log( "Password recovery valid for email", user.email );
-				res.render( 'authentication/resetpassword' );
+				res.render( 'authentication/resetpassword', {continueTo: req.query.continueTo });
 			}
 		});
 	}
 	
 	function postResetPassword( req, res ){
+        var returnURL = '/login?continueTo=' + req.query.continueTo;
 		var token = req.params.token;
 		var password = req.body.password;
 
 		if( !token ){
 			req.flashError( 'Verification link id invalid' );
-			req.redirect( '/login' );
+			req.redirect( returnURL );
 		}
 
 		User.resetPasswordWithToken( token, password, function( error, user ){
 			if( error ){
 				console.error( 'Password reset failed. ', error );
 				req.flashError( 'Error resetting your password. Please try again. ', error );
-				res.redirect( '/login' );
+				res.redirect( returnURL );
 			} else {
 				console.log( 'Password recovery successed for user: ', user.email );
 				req.flashSuccess( 'Your password has been changed. Please login again.' );
-				res.redirect( '/login' );
+				res.redirect( returnURL );
 			}
 		});
 	}
