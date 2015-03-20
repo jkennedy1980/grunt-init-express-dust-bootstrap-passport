@@ -3,7 +3,21 @@
 
 	var config = require('pony-config');
 
-	exports.localize = function( req, res, next ){
+    exports.helpers = function( req, res, next ){
+
+        req.appUrlWithPathAndQueryParams = function( path, queryParams ){
+            path = path || '';
+            var url = req.protocol + '://' + req.get('host') + '/' + path;
+            if( queryParams ){
+                url += '?' + querystring.stringify( queryParams );
+            }
+            return url;
+        };
+
+        next();
+    };
+
+    exports.localize = function( req, res, next ){
 
 		req.flashError = function( message, error ){
 			if( error ){

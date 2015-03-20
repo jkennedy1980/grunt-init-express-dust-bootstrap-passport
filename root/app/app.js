@@ -88,6 +88,7 @@ app.use( lusca({
 
 app.use( flash() );
 app.use( middleware.localize );
+app.use( middleware.helpers );
 
 
 // LOAD THANGS FROM THE /routes DIRECTORY
