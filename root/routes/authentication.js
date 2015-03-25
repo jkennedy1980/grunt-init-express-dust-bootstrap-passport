@@ -76,7 +76,7 @@
 				return;
 			}
 
-			var activationURL = req.appUrlWithPathAndQueryParams( 'emailVerification/' + registeredUser.emailVerificationToken, { continueTo : continueTo } );;
+			var activationURL = req.appUrlWithPathAndQueryParams( 'emailVerification/' + registeredUser.emailVerificationToken, { continueTo: continueTo } );
 
 			emailer.sendEmail( "register", { activationUrl: activationURL }, registeredUser.email, "Please activate your account", function( error, result ){
 				if( error ){
@@ -146,7 +146,7 @@
 				console.error( 'Email validation failed.', error );
 				req.flashError( 'Email validation failed.', error );
 				if( user ){
-					var message = "<a href='/resendRegistrationValidationEmail/" + user.email + "?continueTo=" + continueTo +"'>Resend Verification Email</a>";
+					var message = "<a href='/resendRegistrationValidationEmail/" + user.email + "?continueTo=" + continueTo + "'>Resend Verification Email</a>";
 					req.flashError( message );
 				}
 			} else {
@@ -182,7 +182,7 @@
 				if( !user ){
 					console.log( 'Email for password recovery not recognized' );
 				} else {
-					var recoveryURL = req.appUrlWithPathAndQueryParams( "resetpassword/" + user.passwordRecoveryToken, { continueTo: continueTo })
+					var recoveryURL = req.appUrlWithPathAndQueryParams( "resetpassword/" + user.passwordRecoveryToken, { continueTo: continueTo });
 					emailer.sendEmail( "password-recovery", { recoveryURL: recoveryURL }, email, "Follow this link to reset your password", function( error, result ){
 						if( error ){
 							req.flashError( "Error sending password recovery email. Please try again later. ", error );
