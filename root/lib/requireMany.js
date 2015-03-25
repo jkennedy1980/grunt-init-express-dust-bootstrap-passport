@@ -48,9 +48,9 @@
 			_scanDirectory( rootPath + "/" + file, output );
 		} catch( error ){
 			// expensive to expect exceptions -- shouldn't matter during app load
-			var module = require( rootPath + "/" + file );
+			var _module = require( rootPath + "/" + file );
 			var moduleName = file.substr( 0, file.lastIndexOf('.') );
-			output[ moduleName ] = module;
+			output[ moduleName ] = _module;
 		}
 	}
 

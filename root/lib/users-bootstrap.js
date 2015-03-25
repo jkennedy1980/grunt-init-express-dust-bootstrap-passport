@@ -9,9 +9,9 @@
 	exports.setupInitialUsers = function( callback ){
 		var User = mongoose.model('User');
 		var initialAdminUser = config.get('initial_admin_user');
-		if( ! initialAdminUser ) return callback( false );
+		if( !initialAdminUser ) return callback( false );
 
-		User.findOne( { roles : UserRoles.ADMIN }, function( error, user ){
+		User.findOne( { roles: UserRoles.ADMIN }, function( error, user ){
 			if( error ){
 				console.error( "Failed to determine is an admin account exists:", error );
 				return callback( error );

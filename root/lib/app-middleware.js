@@ -2,6 +2,7 @@
 	'use strict';
 
 	var config = require('pony-config');
+	var querystring = require('querystring');
 
     exports.helpers = function( req, res, next ){
 
