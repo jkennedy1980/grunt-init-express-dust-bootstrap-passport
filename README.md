@@ -18,7 +18,7 @@ First, be sure you have grunt-init installed [grunt-init][].
 
 Next, clone this repo into your grunt init templates folder using the following command:
 ```
-git clone https://github.com/jkennedy1980/grunt-init-express-dust-bootstrap.git ~/.grunt-init/grunt-init-express-dust-bootstrap
+git clone https://github.com/jkennedy1980/grunt-init-express-dust-bootstrap-passport.git ~/.grunt-init/grunt-init-express-dust-bootstrap-passport
 ```
 
 _(Windows users, see [the documentation][grunt-init] for the correct destination directory path)_
@@ -26,7 +26,7 @@ _(Windows users, see [the documentation][grunt-init] for the correct destination
 Then, run the following command in the empty root folder for your project:
 
 ```
-grunt-init grunt-init-express-dust-bootstrap
+grunt-init grunt-init-express-dust-bootstrap-passport
 ```
 
 ## Initial Accounts
